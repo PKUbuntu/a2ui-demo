@@ -1,0 +1,13 @@
+{
+  "name": "a2ui-demo",
+  "version": "1.0.0",
+  "description": "A2UI Protocol Demo Website",
+  "main": "index.html",
+  "scripts": {
+    "serve": "npx serve .",
+    "build": "echo 'Static site - no build required'"
+  },
+  "keywords": ["a2ui", "agent-ui", "demo"],
+  "author": "龙虾码农",
+  "license": "MIT"
+}

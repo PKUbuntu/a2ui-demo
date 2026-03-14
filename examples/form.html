@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>表单示例 - A2UI Demo</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="logo">🤖</span>
+      <span class="brand-text">A2UI Demo</span>
+    </div>
+    <div class="nav-links">
+      <a href="../index.html">首页</a>
+      <a href="../canvas.html">Canvas 展示</a>
+      <a href="form.html" class="active">表单示例</a>
+      <a href="list.html">列表示例</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <h1>表单组件示例</h1>
+    <p>展示 A2UI 表单相关组件的使用方法。</p>
+    
+    <section class="demo-section">
+      <h2>TextField 文本输入</h2>
+      <div class="code-example">
+        <pre><code>{"TextField": {
+  "label": {"literalString": "用户名"},
+  "text": {"path": "/form/username"}
+}}</code></pre>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <h2>CheckBox 复选框</h2>
+      <div class="code-example">
+        <pre><code>{"CheckBox": {
+  "label": {"literalString": "同意条款"},
+  "value": false
+}}</code></pre>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <h2>完整表单示例</h2>
+      <p>查看 Canvas 页面的"表单示例"获取完整代码。</p>
+      <a href="../canvas.html" class="btn btn-primary">前往 Canvas</a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>A2UI Demo © 2026</p>
+  </footer>
+</body>
+</html>

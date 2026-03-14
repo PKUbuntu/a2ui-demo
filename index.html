@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A2UI Demo - Agent to UI Protocol</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="logo">🤖</span>
+      <span class="brand-text">A2UI Demo</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="active">首页</a>
+      <a href="canvas.html">Canvas 展示</a>
+      <a href="examples/form.html">表单示例</a>
+      <a href="examples/list.html">列表示例</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-content">
+      <h1>A2UI Protocol</h1>
+      <p class="tagline">Agent to UI - AI 驱动的下一代 UI 协议</p>
+      <p class="description">
+        A2UI 是一种让 AI Agent 能够实时生成和更新用户界面的协议。
+        通过 JSONL 流式消息，Agent 可以构建丰富的交互式界面。
+      </p>
+      <div class="hero-actions">
+        <a href="canvas.html" class="btn btn-primary">查看 Canvas 演示</a>
+        <a href="https://github.com/google/A2UI" class="btn btn-secondary" target="_blank">GitHub 文档</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="features">
+      <h2>核心特性</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <h3>声明式 UI</h3>
+          <p>使用 JSON 定义界面结构，Agent 无需了解渲染细节</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3>实时更新</h3>
+          <p>通过流式消息实时推送 UI 更新，支持渐进式渲染</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>跨平台</h3>
+          <p>同一套协议可用于 Web、Mobile、Desktop 等多端渲染</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>组件丰富</h3>
+          <p>16+ 标准组件：表单、列表、卡片、模态框等</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="protocol">
+      <h2>协议概览</h2>
+      <div class="protocol-flow">
+        <div class="flow-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>surfaceUpdate</h4>
+            <p>定义或更新 UI 组件</p>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>dataModelUpdate</h4>
+            <p>填充或更新数据状态</p>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>beginRendering</h4>
+            <p>通知客户端开始渲染</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-start">
+      <h2>快速开始</h2>
+      <div class="code-example">
+        <pre><code class="language-json">// 简单的 A2UI 消息示例
+{"surfaceUpdate": {"surfaceId": "main", "components": [
+  {"id": "root", "component": {"Column": {"children": {"explicitList": ["title", "button"]}}}},
+  {"id": "title", "component": {"Text": {"text": {"literalString": "Hello A2UI"}, "usageHint": "h1"}}},
+  {"id": "button", "component": {"Button": {"child": "btn_text", "action": {"name": "click"}}}}},
+  {"id": "btn_text", "component": {"Text": {"text": {"literalString": "Click Me"}}}}
+]}}
+{"beginRendering": {"surfaceId": "main", "root": "root"}}</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>A2UI Demo © 2026 | Powered by OpenClaw</p>
+  </footer>
+</body>
+</html>

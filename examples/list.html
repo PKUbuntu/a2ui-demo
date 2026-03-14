@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>列表示例 - A2UI Demo</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="logo">🤖</span>
+      <span class="brand-text">A2UI Demo</span>
+    </div>
+    <div class="nav-links">
+      <a href="../index.html">首页</a>
+      <a href="../canvas.html">Canvas 展示</a>
+      <a href="form.html">表单示例</a>
+      <a href="list.html" class="active">列表示例</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <h1>列表组件示例</h1>
+    <p>展示 A2UI 列表相关组件的使用方法。</p>
+    
+    <section class="demo-section">
+      <h2>List 列表</h2>
+      <div class="code-example">
+        <pre><code>{"List": {
+  "direction": "vertical",
+  "template": "item_template"
+}}</code></pre>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <h2>Column 垂直布局</h2>
+      <div class="code-example">
+        <pre><code>{"Column": {
+  "children": {"explicitList": ["item1", "item2", "item3"]},
+  "distribution": "start",
+  "alignment": "stretch"
+}}</code></pre>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <h2>Row 水平布局</h2>
+      <div class="code-example">
+        <pre><code>{"Row": {
+  "children": {"explicitList": ["left", "right"]},
+  "distribution": "spaceBetween"
+}}</code></pre>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <h2>完整列表示例</h2>
+      <p>查看 Canvas 页面的"列表示例"获取完整代码。</p>
+      <a href="../canvas.html" class="btn btn-primary">前往 Canvas</a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>A2UI Demo © 2026</p>
+  </footer>
+</body>
+</html>

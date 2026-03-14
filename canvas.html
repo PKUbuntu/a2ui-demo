@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas 展示 - A2UI Demo</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="logo">🤖</span>
+      <span class="brand-text">A2UI Demo</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">首页</a>
+      <a href="canvas.html" class="active">Canvas 展示</a>
+      <a href="examples/form.html">表单示例</a>
+      <a href="examples/list.html">列表示例</a>
+    </div>
+  </nav>
+
+  <main class="canvas-page">
+    <div class="canvas-header">
+      <h1>🎨 A2UI Canvas 演示</h1>
+      <p>实时渲染 A2UI 协议消息</p>
+    </div>
+
+    <div class="canvas-container">
+      <div class="input-panel">
+        <h3>JSONL 输入</h3>
+        <textarea id="jsonl-input" placeholder="输入 A2UI JSONL 消息..."></textarea>
+        <div class="input-actions">
+          <button id="render-btn" class="btn btn-primary">渲染</button>
+          <button id="clear-btn" class="btn btn-secondary">清空</button>
+          <select id="example-select" class="example-select">
+            <option value="">选择示例...</option>
+            <option value="hello">Hello World</option>
+            <option value="form">表单示例</option>
+            <option value="list">列表示例</option>
+            <option value="card">卡片布局</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="output-panel">
+        <h3>渲染结果</h3>
+        <div id="canvas-output" class="canvas-output">
+          <div class="placeholder">
+            <p>👈 在左侧输入 A2UI JSONL 消息，点击"渲染"查看效果</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="examples-section">
+      <h3>快速示例</h3>
+      <div class="example-cards">
+        <div class="example-card" data-example="hello">
+          <h4>Hello World</h4>
+          <p>最简单的 A2UI 示例</p>
+        </div>
+        <div class="example-card" data-example="form">
+          <h4>表单组件</h4>
+          <p>文本输入、按钮等</p>
+        </div>
+        <div class="example-card" data-example="list">
+          <h4>列表渲染</h4>
+          <p>动态列表展示</p>
+        </div>
+        <div class="example-card" data-example="card">
+          <h4>卡片布局</h4>
+          <p>Card 容器组件</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>A2UI Demo © 2026 | Powered by OpenClaw</p>
+  </footer>
+
+  <script src="js/a2ui-renderer.js"></script>
+  <script src="js/canvas.js"></script>
+</body>
+</html>
