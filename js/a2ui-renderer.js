@@ -1,5 +1,5 @@
 /**
- * A2UI Simple Renderer
+ * A2UI Simple Renderer v2
  * 将 A2UI JSONL 消息渲染为 HTML
  */
 
@@ -22,8 +22,19 @@ class A2UIRenderer {
         this.processMessage(message);
       } catch (e) {
         console.error('Failed to parse line:', line, e);
+        this.showError('JSON 解析错误: ' + e.message);
       }
     }
+  }
+
+  /**
+   * 显示错误
+   */
+  showError(message) {
+    const errorEl = document.createElement('div');
+    errorEl.style.cssText = 'background: #ffebee; color: #c62828; padding: 1rem; border-radius: 8px; margin: 0.5rem 0;';
+    errorEl.textContent = message;
+    this.container.appendChild(errorEl);
   }
 
   /**
@@ -76,7 +87,7 @@ class A2UIRenderer {
     const { surfaceId, root, styles } = render;
     const surface = this.surfaces[surfaceId];
     if (!surface) {
-      console.error('Surface not found:', surfaceId);
+      this.showError('Surface not found: ' + surfaceId);
       return;
     }
 
@@ -92,9 +103,14 @@ class A2UIRenderer {
 
     // 渲染
     this.container.innerHTML = '';
-    const html = this.renderComponent(surfaceId, root);
-    if (html) {
-      this.container.appendChild(html);
+    try {
+      const html = this.renderComponent(surfaceId, root);
+      if (html) {
+        this.container.appendChild(html);
+      }
+    } catch (e) {
+      console.error('Render error:', e);
+      this.showError('渲染错误: ' + e.message);
     }
   }
 
@@ -107,43 +123,48 @@ class A2UIRenderer {
     
     if (!component) {
       console.warn('Component not found:', componentId);
-      return null;
+      return this.renderText('组件未找到: ' + componentId);
     }
 
     const componentType = Object.keys(component)[0];
     const props = component[componentType];
 
-    switch (componentType) {
-      case 'Text':
-        return this.renderText(surfaceId, props);
-      case 'Button':
-        return this.renderButton(surfaceId, props);
-      case 'Column':
-        return this.renderColumn(surfaceId, props);
-      case 'Row':
-        return this.renderRow(surfaceId, props);
-      case 'Card':
-        return this.renderCard(surfaceId, props);
-      case 'TextField':
-        return this.renderTextField(surfaceId, props);
-      case 'Divider':
-        return this.renderDivider(props);
-      case 'Image':
-        return this.renderImage(props);
-      case 'List':
-        return this.renderList(surfaceId, props);
-      case 'CheckBox':
-        return this.renderCheckBox(surfaceId, props);
-      default:
-        console.warn('Unknown component type:', componentType);
-        return this.renderUnknown(componentType);
+    try {
+      switch (componentType) {
+        case 'Text':
+          return this.renderText(props);
+        case 'Button':
+          return this.renderButton(surfaceId, props);
+        case 'Column':
+          return this.renderColumn(surfaceId, props);
+        case 'Row':
+          return this.renderRow(surfaceId, props);
+        case 'Card':
+          return this.renderCard(surfaceId, props);
+        case 'TextField':
+          return this.renderTextField(props);
+        case 'Divider':
+          return this.renderDivider(props);
+        case 'Image':
+          return this.renderImage(props);
+        case 'List':
+          return this.renderList(surfaceId, props);
+        case 'CheckBox':
+          return this.renderCheckBox(props);
+        default:
+          console.warn('Unknown component type:', componentType);
+          return this.renderUnknown(componentType);
+      }
+    } catch (e) {
+      console.error('Error rendering component:', componentId, e);
+      return this.renderError(componentId, e.message);
     }
   }
 
   /**
    * 获取绑定值
    */
-  getBoundValue(surfaceId, boundValue) {
+  getBoundValue(boundValue) {
     if (!boundValue) return '';
     
     if (boundValue.literalString !== undefined) {
@@ -151,29 +172,11 @@ class A2UIRenderer {
     }
     
     if (boundValue.path) {
-      const path = boundValue.path;
-      const dataModel = this.dataModels[surfaceId] || {};
-      const value = this.getByPath(dataModel, path);
-      return value !== undefined ? value : (boundValue.literalString || '');
+      // 简化处理，直接返回默认值
+      return boundValue.literalString || '';
     }
     
     return '';
-  }
-
-  /**
-   * 通过路径获取值
-   */
-  getByPath(obj, path) {
-    const parts = path.split('/').filter(p => p);
-    let current = obj;
-    for (const part of parts) {
-      if (current && typeof current === 'object') {
-        current = current[part];
-      } else {
-        return undefined;
-      }
-    }
-    return current;
   }
 
   /**
@@ -190,11 +193,11 @@ class A2UIRenderer {
 
   // 组件渲染方法
 
-  renderText(surfaceId, props) {
+  renderText(props) {
     const el = document.createElement('div');
     el.className = 'a2ui-text';
     
-    const text = this.getBoundValue(surfaceId, props.text);
+    const text = this.getBoundValue(props.text);
     const usageHint = props.usageHint || 'body';
     
     const tagMap = {
@@ -234,17 +237,28 @@ class A2UIRenderer {
       cursor: pointer;
       font-size: 1rem;
       margin: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     `;
     
-    if (props.child && typeof props.child === 'string') {
-      const childEl = this.renderComponent(surfaceId, props.child);
-      if (childEl) el.appendChild(childEl);
+    // 处理 child
+    if (props.child) {
+      if (typeof props.child === 'string') {
+        // child 是组件 ID
+        const childEl = this.renderComponent(surfaceId, props.child);
+        if (childEl) {
+          // 提取文本内容
+          const textContent = childEl.textContent || '';
+          el.textContent = textContent;
+        }
+      }
     }
     
     if (props.action) {
       el.onclick = () => {
-        console.log('Button action:', props.action.name, props.action.context);
-        alert(`Action: ${props.action.name}`);
+        console.log('Button action:', props.action.name);
+        alert('Action: ' + props.action.name);
       };
     }
     
@@ -301,12 +315,12 @@ class A2UIRenderer {
     return el;
   }
 
-  renderTextField(surfaceId, props) {
+  renderTextField(props) {
     const el = document.createElement('div');
     el.className = 'a2ui-textfield';
     
-    const label = this.getBoundValue(surfaceId, props.label);
-    const value = this.getBoundValue(surfaceId, props.text);
+    const label = this.getBoundValue(props.label);
+    const value = this.getBoundValue(props.text);
     
     if (label) {
       const labelEl = document.createElement('label');
@@ -324,6 +338,7 @@ class A2UIRenderer {
       border: 1px solid #e0e0e0;
       border-radius: 4px;
       font-size: 1rem;
+      box-sizing: border-box;
     `;
     
     el.appendChild(input);
@@ -354,16 +369,11 @@ class A2UIRenderer {
     el.className = 'a2ui-list';
     el.style.cssText = 'display: flex; flex-direction: column; gap: 0.5rem;';
     
-    if (props.template) {
-      // 渲染列表项
-      const items = this.renderChildren(surfaceId, { explicitList: [props.template] });
-      items.forEach(item => el.appendChild(item.cloneNode(true)));
-    }
-    
+    // 简化列表渲染
     return el;
   }
 
-  renderCheckBox(surfaceId, props) {
+  renderCheckBox(props) {
     const el = document.createElement('label');
     el.className = 'a2ui-checkbox';
     el.style.cssText = 'display: flex; align-items: center; gap: 0.5rem; cursor: pointer;';
@@ -372,7 +382,7 @@ class A2UIRenderer {
     input.type = 'checkbox';
     input.checked = props.value || false;
     
-    const label = this.getBoundValue(surfaceId, props.label);
+    const label = this.getBoundValue(props.label);
     
     el.appendChild(input);
     el.appendChild(document.createTextNode(label));
@@ -383,8 +393,16 @@ class A2UIRenderer {
   renderUnknown(type) {
     const el = document.createElement('div');
     el.className = 'a2ui-unknown';
+    el.style.cssText = 'padding: 1rem; background: #fff3e0; border-radius: 4px; color: #e65100;';
+    el.textContent = 'Unknown component: ' + type;
+    return el;
+  }
+
+  renderError(componentId, message) {
+    const el = document.createElement('div');
+    el.className = 'a2ui-error';
     el.style.cssText = 'padding: 1rem; background: #ffebee; border-radius: 4px; color: #c62828;';
-    el.textContent = `Unknown component: ${type}`;
+    el.textContent = 'Error in ' + componentId + ': ' + message;
     return el;
   }
 
